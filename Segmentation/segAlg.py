@@ -43,6 +43,7 @@ def segmentation(image_link):
             val = pixel[0]
             label = pixel[1]
             if(val == 0):
+                # print(row, col)
                 new_label, labels = checkNeighbors(pixels, row, col)
                 pixels[row][col] = [val, new_label]
                 eq_table[new_label] = addList2Set(labels, eq_table.get(new_label, set()))
@@ -88,6 +89,7 @@ def createOutput(bboxes):
 
 def checkNeighbors(pixels, row, col):
     global last_label
+    # print(row, col, row -1, col+1)
     tl = pixels[row-1][col-1]
     t  = pixels[row-1][col]
     tr = pixels[row-1][col+1]
@@ -122,7 +124,11 @@ def addList2Set(l, s):
 
 
 def main():
-    all_bboxes, eq_table = segmentation("Testing Images/test.JPG")
+    if(len(sys.argv) != 2):
+        print("Too few or too many arguments!")
+
+    file_name = sys.argv[1]
+    all_bboxes, eq_table = segmentation(file_name)
     # Call Jessie's code
     eq_clean = createAlliances(eq_table)
     final_labels = []
